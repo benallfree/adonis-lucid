@@ -1345,9 +1345,9 @@ class Model extends BaseModel {
   *
   * @return {Number}
   */
- static async count () {
-   return this.query().rowsCount()
- }
+  static async count () {
+    return this.query().rowsCount()
+  }
 }
 
 module.exports = Model
