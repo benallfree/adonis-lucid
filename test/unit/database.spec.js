@@ -193,6 +193,39 @@ test.group('Database | QueryBuilder', (group) => {
     assert.equal(firstUser.username, 'virk')
     await this.database.truncate('users')
   })
+
+  test('aggregate functions', async (assert) => {
+    await this.database.insert({ username: 'u1' }).into('users')
+    await this.database.insert({ username: 'u2' }).into('users')
+    await this.database.insert({ username: 'u3' }).into('users')
+
+    let c1 = (await this.database.table('users').count('username as total'))[0].total
+    let c2 = await this.database.table('users').getCount()
+    assert.equal(c1, c2)
+
+    c1 = (await this.database.table('users').avg('id as total'))[0].total
+    c2 = await this.database.table('users').getAvg('id')
+    assert.equal(c1, c2)
+
+    try {
+      await this.database.table('users').getAvg()
+      assert.fail('success', 'exception')
+    } catch (err) {
+      assert.equal(err.message, "'getAvg' requires a column name.")
+    }
+
+    c1 = (await this.database.table('users').sum('id as total'))[0].total
+    c2 = await this.database.table('users').getSum('id')
+    assert.equal(c1, c2)
+
+    c1 = (await this.database.table('users').min('id as total'))[0].total
+    c2 = await this.database.table('users').getMin('id')
+    assert.equal(c1, c2)
+
+    c1 = (await this.database.table('users').max('id as total'))[0].total
+    c2 = await this.database.table('users').getMax('id')
+    assert.equal(c1, c2)
+  })
 })
 
 test.group('Database | Manager', () => {

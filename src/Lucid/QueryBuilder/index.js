@@ -815,16 +815,71 @@ class QueryBuilder {
   /**
    * Fetch and return a row count
    *
-   * @method rowsCount
+   * @method getCount
    * @async
    *
-   * @return {Number} The count of rows in this query
+   * @param  {String}   columnName = '*'
+   *
+   * @return {Number} The count of get in this query
    */
-  async rowsCount (columnName = '*') {
-    let wrapper = new this.query.constructor(this.query.client)
-    wrapper.from(this.query.as('__count')).count(`${columnName} as total`)
-    let count = await wrapper
-    return count[0].total
+  async getCount (columnName = '*') {
+    return this.query.getCount(columnName)
+  }
+
+  /**
+   * Fetch and return the sum of all values in columnName
+   *
+   * @method getSum
+   * @async
+   *
+   * @param  {String}   columnName
+   *
+   * @return {Number} The sum of columnName
+   */
+  async getSum (columnName) {
+    return this.query.getSum(columnName)
+  }
+
+  /**
+   * Fetch and return the minimum of all values in columnName
+   *
+   * @method getMin
+   * @async
+   *
+   * @param  {String}   columnName
+   *
+   * @return {Number} The minimunm value of columnName
+   */
+  async getMin (columnName) {
+    return this.query.getMin(columnName)
+  }
+
+  /**
+   * Fetch and return the maximum of all values in columnName
+   *
+   * @method getMax
+   * @async
+   *
+   * @param  {String}   columnName
+   *
+   * @return {Number} The maximunm value of columnName
+   */
+  async getMax (columnName) {
+    return this.query.getMax(columnName)
+  }
+
+  /**
+   * Fetch and return the average of all values in columnName
+   *
+   * @method getAvg
+   * @async
+   *
+   * @param  {String}   columnName
+   *
+   * @return {Number} The average value of columnName
+   */
+  async getAvg (columnName) {
+    return this.query.getAvg(columnName)
   }
 }
 

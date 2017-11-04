@@ -1341,12 +1341,56 @@ class Model extends BaseModel {
  /**
   * Return a count of all model records.
   *
-  * @method count
+  * @method getCount
   *
   * @return {Number}
   */
-  static async count () {
-    return this.query().rowsCount()
+  static async getCount (columnName = '*') {
+    return this.query().getCount(columnName)
+  }
+
+ /**
+  * Return the avgerage of all values of columnName.
+  *
+  * @method getAvg(columnName)
+  *
+  * @return {Number}
+  */
+  static async getAvg (columnName) {
+    return this.query().getAvg(columnName)
+  }
+
+ /**
+  * Return the minimum of all values of columnName.
+  *
+  * @method getMin(coulmnName)
+  *
+  * @return {Number}
+  */
+  static async getMin (columnName) {
+    return this.query().getMin(columnName)
+  }
+
+ /**
+  * Return the maximum of all values of columnName.
+  *
+  * @method getMax(coulmnName)
+  *
+  * @return {Number}
+  */
+  static async getMax (columnName) {
+    return this.query().getMax(columnName)
+  }
+
+ /**
+  * Return the sum of all values of columnName.
+  *
+  * @method getSum(coulmnName)
+  *
+  * @return {Number}
+  */
+  static async getSum (columnName) {
+    return this.query().getSum(columnName)
   }
 }
 

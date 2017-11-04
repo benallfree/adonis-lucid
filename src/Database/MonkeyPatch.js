@@ -130,3 +130,74 @@ KnexQueryBuilder.prototype.paginate = async function (page = 2, perPage = 20) {
     data: data
   }
 }
+
+function generateAggregate (aggregateOp, defaultColumnName = undefined) {
+  let funcName = 'get' + aggregateOp.charAt(0).toUpperCase() + aggregateOp.slice(1)
+  KnexQueryBuilder.prototype[funcName] = async function (columnName = defaultColumnName) {
+    if (!columnName) throw new Error(`'${funcName}' requires a column name.`)
+    let wrapper = new this.constructor(this.client)
+    wrapper.from(this.as('__lucid'))[aggregateOp](`${columnName} as __lucid_aggregate`)
+    let results = await wrapper
+    return results[0].__lucid_aggregate
+  }
+}
+
+/**
+ * Fetch and return a row count
+ *
+ * @method getCount
+ * @async
+ *
+ * @param  {String}   columnName = '*'
+ *
+ * @return {Number} The count of get in this query
+ */
+generateAggregate('count', '*')
+
+/**
+ * Fetch and return the sum of all values in columnName
+ *
+ * @method getSum
+ * @async
+ *
+ * @param  {String}   columnName
+ *
+ * @return {Number} The sum of columnName
+ */
+generateAggregate('sum')
+
+/**
+ * Fetch and return the minimum of all values in columnName
+ *
+ * @method getMin
+ * @async
+ *
+ * @param  {String}   columnName
+ *
+ * @return {Number} The minimunm value of columnName
+ */
+generateAggregate('min')
+
+/**
+ * Fetch and return the maximum of all values in columnName
+ *
+ * @method getMax
+ * @async
+ *
+ * @param  {String}   columnName
+ *
+ * @return {Number} The maximunm value of columnName
+ */
+generateAggregate('max')
+
+/**
+ * Fetch and return the average of all values in columnName
+ *
+ * @method getAvg
+ * @async
+ *
+ * @param  {String}   columnName
+ *
+ * @return {Number} The average value of columnName
+ */
+generateAggregate('avg')
